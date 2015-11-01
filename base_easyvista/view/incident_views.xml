@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <menuitem name="Easy EasyVista"
+            id="menu_base_easy"
+            sequence="6"/>
+
+  <menuitem name="Configuration"
+            id="menu_base_easy_config"
+            parent='menu_base_easy'
+            sequence="6"/>
+
+  <record id="easy_incident_form_view" model="ir.ui.view">
+    <field name="name">easy incident form view</field>
+    <field name="model">easy_incident</field>
+    <field name="arch" type="xml">
+      <form string="Incident">
+        <header>
+
+          <button name="populate_incident"
+                  string="Generate demo"
+                  type="object" class="oe_highlight o_wow"/>
+
+          <field name="stage_id" widget="statusbar" clickable="True"
+                 options="{'fold_field': 'fold'}"/>
+        </header>
+        <sheet>
+          <div class="oe_title"><h1> <field name='number' readonly="1"/></h1></div>
+          <field name="name" placeholder="Summary of incident"/>
+          <notebook>
+            <page string="Information" colspan="4">
+              <group>
+                <field name="beneficiary_id"/>
+                <field name="entity"/>
+                <field name="ci_id"/>
+                <field name="material_ids"/>
+                <field name="description"/>
+              </group>
+            </page>
+            <page string="Execution">
+              <group>
+                <field name="resource_id"/>
+                <field name="execution_date"/>
+                <field name="end_date"/>
+                <field name="execution_days"/>
+              </group>
+            </page>
+          </notebook>
+        </sheet>
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers"/>
+          <field name="message_ids" widget="mail_thread"/>
+        </div>
+      </form>
+    </field>
+  </record>
+
+
+  <record model="ir.ui.view" id="easy_incident_calendar_view">
+    <field name="name">Incident Calendar</field>
+    <field name="model">easy_incident</field>
+    <field name="priority" eval="2"/>
+    <field name="arch" type="xml">
+      <calendar string="Incident"
+                date_start="execution_date" color="resource_id">
+        <field name="number"/>
+        <field name="name"/>
+        <field name="beneficiary_id"/>
+        <field name="resource_id"/>
+      </calendar>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="easy_incident_kanban_view">
+    <field name="name">Incidents</field>
+    <field name="model">easy_incident</field>
+    <field name="arch" type="xml">
+      <kanban default_group_by="stage_id" class="o_kanban_small_column">
+        <field name="stage_id" options='{"group_by_tooltip": {"requirements": "name"}}'/>
+
+        <field name="name"/>
+        <field name="beneficiary_id"/>
+        <field name="resource_id"/>
+        <templates>
+          <t t-name="kanban-box">
+            <div class="o_dropdown_kanban dropdown">
+              <div>
+              <a class="dropdown-toggle btn" data-toggle="dropdown" href="#" >
+                <span class="fa fa-bars fa-lg"/>
+              </a>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <t t-if="widget.editable"><li><a type="edit">Edit</a></li></t>
+                <t t-if="widget.deletable"><li><a type="delete">Delete</a></li></t>
+              </ul>
+            </div>
+
+            <div class="oe_kanban_content">
+              <div>
+                <strong><field name="number"/></strong>
+                <field name="name"/>
+
+                <div class="o_kanban_footer">
+                  <img t-att-src="kanban_image('res.users', 'image_small', record.resource_id.raw_value)" t-att-title="record.resource_id.name" width="24" height="24" class="oe_kanban_avatar pull-right"/>
+                </div>
+              </div>
+            </div>
+            <div class="oe_clear"></div>
+            </div>
+          </t>
+        </templates>
+      </kanban>
+    </field>
+  </record>
+
+
+  <record model="ir.ui.view" id="easy_incident_graph">
+    <field name="name">Incident</field>
+    <field name="model">easy_incident</field>
+    <field name="arch" type="xml">
+      <graph string="Incidents" type="bar">
+        <field name="stage_id" type="row"/>
+        <field name="resource_id" type="measure"/>
+        <field name="beneficiary_id" type="measure"/>
+      </graph>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="easy_incident_pivot">
+    <field name="name">Incidents</field>
+    <field name="model">easy_incident</field>
+    <field name="arch" type="xml">
+      <pivot string="Incidents" display_quantity="true">
+        <field name="stage_id" type="row"/>
+        <field name="execution_days" type="measure"/>
+        <field name="end_date" type="measure"/>
+      </pivot>
+    </field>
+  </record>
+
+  <record id="easy_incident_list_view" model="ir.ui.view">
+    <field name="name">easy incident form view</field>
+    <field name="model">easy_incident</field>
+    <field name="arch" type="xml">
+      <tree string="Incidents">
+        <field name='number'/>
+        <field name='name'/>
+        <field name='beneficiary_id'/>
+        <field name='resource_id'/>
+        <field name='execution_date'/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="easy_incident_search_view" model="ir.ui.view">
+    <field name="name">Search Incidents</field>
+    <field name="model">easy_incident</field>
+    <field name="arch" type="xml">
+      <search string="Search Incidents">
+        <field name="number"/>
+        <field name="beneficiary_id"/>
+        <field name="resource_id"/>
+        <field name="ci_id"/>
+        <field name="execution_date"/>
+        <separator />
+        <filter name="my_incident"
+               string="My incidents" domain="[('beneficiary_id.id','=', uid)]"/>
+        <filter string="Open"
+                name="stage_open"
+                domain="[('stage_id.name', 'ilike', 'open')]"/>
+        <filter string="Running"
+                name="stage_running"
+                domain="[('stage_id.name', 'ilike', 'running')]"/>
+        <filter string="Close"
+                name="stage_close"
+                domain="[('stage_id.name', 'ilike', 'close')]"/>
+        <group expand="0" string="Group By">
+          <filter string="Beneficiary" domain="[]" context="{'group_by':'beneficiary_id'}"/>
+          <filter string="Resource" domain="[]" context="{'group_by':'resource_id'}"/>
+          <filter string="Stage" domain="[]" context="{'group_by':'stage_id'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
+  <record id="easy_incident_gantt" model="ir.ui.view">
+    <field name="name">Incident</field>
+    <field name="model">easy_incident</field>
+    <field name="arch" type="xml">
+      <gantt date_stop="end_date" date_start="execution_date" progress="progress" string="Incident" default_group_by="resource_id">
+      </gantt>
+    </field>
+  </record>
+
+  <record model="ir.actions.act_window" id="easy_all_incident">
+    <field name="name">Incidents</field>
+    <field name="res_model">easy_incident</field>
+    <field name="view_mode">tree,form,kanban,graph,calendar,pivot,gantt</field>
+    <field name="domain"></field>
+    <field name="view_id" ref="easy_incident_list_view"/>
+    <field name="help" type="html">
+      <p>Use incident if bla bla bla </p>
+    </field>
+  </record>
+
+  <menuitem name="Incident"
+            id="menu_base_easy_incident"
+            parent='menu_base_easy'
+            action="easy_all_incident"
+            sequence="6"/>
+
+</odoo>

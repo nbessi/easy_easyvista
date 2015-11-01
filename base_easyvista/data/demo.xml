@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <record model="res.partner" id="base.partner_root">
+      <field name="email">admin@vd.ch</field>
+    </record>
+
+    <record model="res.users" id="base.user_root">
+      <field name="entity_id" ref="entity1"/>
+    </record>
+
+
+    <record model="res.partner" id="base.user_demo">
+      <field name="email">demo@vd.ch</field>
+    </record>
+
+    <record model="res.users" id="base.user_demo">
+      <field name="entity_id" ref="entity1"/>
+    </record>
+
+    <record model="res.partner" id="nbessi">
+      <field name="name">Nicolas Bessi</field>
+      <field name="company_id" ref="base.main_company"/>
+      <field name="customer" eval="False"/>
+      <field name="email">nicolas.bessi@vd.ch</field>
+    </record>
+
+    <record model="res.users" id="user_nbessi">
+      <field name="partner_id" ref="nbessi"/>
+      <field name="login" eval="nbessi"/>
+      <field name="company_id" ref="base.main_company"/>
+      <field name="company_ids" eval="[(4, ref('base.main_company'))]"/>
+    </record>
+
+    <record model="res.partner" id="dupont">
+      <field name="name">Dupont</field>
+      <field name="company_id" ref="base.main_company"/>
+      <field name="customer" eval="False"/>
+      <field name="email">dupont.dupond@vd.ch</field>
+    </record>
+
+    <record model="res.users" id="user_dupont">
+      <field name="partner_id" ref="dupont"/>
+      <field name="login" eval="dupont"/>
+      <field name="company_id" ref="base.main_company"/>
+      <field name="company_ids" eval="[(4, ref('base.main_company'))]"/>
+    </record>
+  </data>
+</odoo>

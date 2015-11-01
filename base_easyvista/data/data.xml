@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data >
+    <record id="easy_incident_sequence" model="ir.sequence">
+            <field name="name">Incident</field>
+            <field name="code">incident</field>
+            <field name="prefix"></field>
+            <field eval="1000" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+            <field eval="False" name="use_date_range"/>
+            <field name="padding">4</field>
+    </record>
+
+    <record id="ci1" model="easy_ci">
+      <field name="name">Geoportail integration DB</field>
+    </record>
+    <record id="ci2" model="easy_ci">
+      <field name="name">Geoportail intergation mapfish</field>
+    </record>
+    <record id="ci3" model="easy_ci">
+      <field name="name">Geoportail validation DB</field>
+    </record>
+    <record id="ci4" model="easy_ci">
+      <field name="name">Geoportail validation mapfish</field>
+    </record>
+    <record id="ci5" model="easy_ci">
+      <field name="name">Geoportail production DB</field>
+    </record>
+    <record id="ci6" model="easy_ci">
+      <field name="name">Geoportail production mapfish</field>
+    </record>
+
+    <record id="st1" model="easy_stage">
+      <field name="name">Open</field>
+    </record>
+    <record id="st2" model="easy_stage">
+      <field name="name">Running</field>
+    </record>
+    <record id="st3" model="easy_stage">
+      <field name="name">Done</field>
+    </record>
+    <record id="entity1" model="easy_entity">
+      <field name="name">AdmCV/DIHR/DSI/DSOL/PTEP</field>
+    </record>
+
+
+    <record id="mat1" model="easy_material">
+      <field name="name">T918520</field>
+    </record>
+    <record id="mat2" model="easy_material">
+      <field name="name">T918521</field>
+    </record>
+    <record id="mat3" model="easy_material">
+      <field name="name">T918522</field>
+    </record>
+    <record id="mat4" model="easy_material">
+      <field name="name">T918523</field>
+    </record>
+    <record id="mat5" model="easy_material">
+      <field name="name">T918524</field>
+    </record>
+    <record id="mat6" model="easy_material">
+      <field name="name">T918525</field>
+    </record>
+    <record id="mat7" model="easy_material">
+      <field name="name">T918526</field>
+    </record>
+    <record id="mat8" model="easy_material">
+      <field name="name">T918527</field>
+    </record>
+
+    <record id="easy_incident_changes" model="mail.message.subtype">
+        <field name="name">Stage Change</field>
+        <field name="res_model">easy_incident</field>
+        <field name="description">Stage Change</field>
+    </record>
+  </data>
+</odoo>
